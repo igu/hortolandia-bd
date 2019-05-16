@@ -86,7 +86,31 @@ public class UsuarioImpl implements UsuarioDAO {
 
 	@Override
 	public void updateUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
+		PreparedStatement preparedStatement;
+		Statement stm;
+		Connection conn;
+		try {
+			conn = ProvedorConexao.getConnection();
+			String insertTableSQL = "UPDATE Usuario SET NomeUsuario=?, Senha=?, Nome=?, DataNascimento=?, Email=?, Logradouro=?,"
+					+ "NumeroResidencia=?, Complemento=?, CEP=?, Cidade=?, Estado=? WHERE IdUsuario=?";
+				preparedStatement = conn.prepareStatement(insertTableSQL);
+				preparedStatement.setString(1, usuario.getNomeUsuario());
+				preparedStatement.setString(2, usuario.getSenha());
+				preparedStatement.setString(3, usuario.getNome());
+				preparedStatement.setString(4, usuario.getDataNascimento());
+				preparedStatement.setString(5, usuario.getEmail());
+				preparedStatement.setString(6, usuario.getLogradouro());
+				preparedStatement.setString(7, usuario.getNumeroResidencia());
+				preparedStatement.setString(8, usuario.getComplemento());
+				preparedStatement.setString(9, usuario.getCEP());
+				preparedStatement.setString(10, usuario.getCidade());
+				preparedStatement.setString(11, usuario.getEstado());
+				preparedStatement.setInt(12, usuario.getIdUsuario());
+				int resultado = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -144,7 +168,21 @@ public class UsuarioImpl implements UsuarioDAO {
 				if(rs != null && rs.next()) {
 					Usuario usuario = new Usuario();
 		            usuario.setIdUsuario(rs.getInt("IdUsuario"));
+		            usuario.setNomeUsuario(rs.getString("NomeUsuario"));
+		            usuario.setSenha(rs.getString("senha"));
 		            usuario.setNome(rs.getString("Nome"));
+		            usuario.setCPF(rs.getString("CPF"));
+		            usuario.setRG(rs.getString("RG"));
+		            usuario.setDataNascimento(rs.getString("DataNascimento"));
+		            usuario.setNaturalidade(rs.getString("Naturalidade"));
+		            usuario.setNacionalidade(rs.getString("Nacionalidade"));
+		            usuario.setEmail(rs.getString("Email"));
+		            usuario.setLogradouro(rs.getString("Logradouro"));
+		            usuario.setNumeroResidencia(rs.getString("NumeroResidencia"));
+		            usuario.setComplemento(rs.getString("Complemento"));
+		            usuario.setCEP(rs.getString("CEP"));
+		            usuario.setCidade(rs.getString("Cidade"));
+		            usuario.setEstado(rs.getString("Estado"));
 		            return usuario;
 				}
 			rs.close();

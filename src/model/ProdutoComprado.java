@@ -2,45 +2,31 @@ package model;
 
 public class ProdutoComprado {
 	
+	private Produto produto;
 	private int quantidade;
-	private double preco;
-	private double total;
-	private int IdProduto;
-	private int IdCompra;
 
 	public int getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(int quantidade) {
-		this.quantidade = quantidade;
-	}
-
 	public double getPreco() {
-		return preco;
-	}
-
-	public void setPreco(double preco) {
-		this.preco = preco;
+		return getProduto().getPreco();
 	}
 	
 	public double getTotal() {
 		return getPreco()*getQuantidade();
 	}
 
-	public int getIdProduto() {
-		return IdProduto;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setIdProduto(int idProduto) {
-		IdProduto = idProduto;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
-	public int getIdCompra() {
-		return IdCompra;
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
 	}
 
-	public void setIdCompra(int idCompra) {
-		IdCompra = idCompra;
-	}
 }
