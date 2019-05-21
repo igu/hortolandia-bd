@@ -470,8 +470,8 @@ public class SistemaFuncionalidades {
 						if(usuarioComprador != null) authUserComprador = true;
 					}while(!authUserComprador);
 					System.out.println("Olá, " + usuarioComprador.getNome());
-					compradao.addCompra(listaProdutos, usuarioComprador.getIdUsuario());
-					System.out.println("Compra realizada com sucesso...");
+					int resultado = compradao.addCompra(listaProdutos, usuarioComprador.getIdUsuario());
+					System.out.println("Compra realizada com sucesso: " + resultado);
 					break;
 				case "8":
 					break;
@@ -547,7 +547,7 @@ public class SistemaFuncionalidades {
 	
 	public static void produtosDisponiveis() {
 		List<Produto> produtos = produtodao.listarTodosProdutos();
-		System.out.println("Qtd\tPreco\tNome");
+		System.out.println("Id\tQtd\tPreco\tNome");
 		for(int i = 0; i < produtos.size(); i++) {
 			System.out.println(produtos.get(i).toString());
 		}

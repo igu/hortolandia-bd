@@ -58,7 +58,7 @@ public class Produto {
 	}
 	
 	public String toString() {
-		return getQuantidade() + "\t" + getPreco() + "\t" + getNome();
+		return getIdProduto() + "\t" + getQuantidade() + "\t" + getPreco() + "\t" + getNome();
 	}
 	
 }
