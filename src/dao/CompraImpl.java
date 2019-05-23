@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -138,5 +139,32 @@ public class CompraImpl implements CompraDAO {
 			}
 		}
 		return resultado;
+	}
+
+	@Override
+	public List<Compra> listarComprasRealizadas() {
+		List<Compra> compras = new ArrayList<Compra>();
+		PreparedStatement preparedStatement;
+		Statement stm;
+		Connection conn;
+		try {
+			conn = ProvedorConexao.getConnection();
+			String selectTableSQL = "SELECT * FROM Compra";
+				preparedStatement = conn.prepareStatement(selectTableSQL);
+				ResultSet rs = preparedStatement.executeQuery();
+				while (rs.next()) {
+		             Compra compra = new Compra();
+		             compra.setIdCompra(rs.getInt("IdCompra"));
+		             compra.setData(rs.getString("Data"));
+		             compra.setValor(rs.getDouble("Valor"));
+		             compra.setIdComprador(rs.getInt("IdComprador"));
+		             compras.add(compra);
+		         }
+		         rs.close();
+		         return compras;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

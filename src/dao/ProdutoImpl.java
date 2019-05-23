@@ -168,5 +168,83 @@ public class ProdutoImpl implements ProdutoDAO {
 		}
 		return null;
 	}
+
+
+	@Override
+	public List<Produto> procurarProdutosPorNome(String nome) {
+		List<Produto> produtos = new ArrayList<Produto>();
+		PreparedStatement preparedStatement;
+		Statement stm;
+		Connection conn;
+		try {
+			conn = ProvedorConexao.getConnection();
+			String selectTableSQL = "SELECT * FROM Produto WHERE Nome LIKE %?%";
+				preparedStatement = conn.prepareStatement(selectTableSQL);
+				preparedStatement.setString(1, nome);
+				ResultSet rs = preparedStatement.executeQuery();
+				while (rs.next()) {
+		             Produto produto = new Produto();
+		             produto.setIdProduto(rs.getInt("IdProduto"));
+		             produto.setNome(rs.getString("Nome"));
+		             produto.setDescricao(rs.getString("Descricao"));
+		             produto.setCategoria(rs.getString("Categoria"));
+		             produto.setQuantidade(rs.getInt("Quantidade"));
+		             produto.setPreco(rs.getDouble("Preco"));		             
+		             produtos.add(produto);
+		         }
+		         rs.close();
+		         return produtos;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+	@Override
+	public Produto produtoMaisVendido() {
+		PreparedStatement preparedStatement;
+		Statement stm;
+		Connection conn;
+		try {
+			conn = ProvedorConexao.getConnection();
+			String selectTableSQL = 
+					"SELECT" + 
+					"SUM(pco.Quantidade) AS QuantidadeVendida," + 
+					" pro.*" + 
+					" FROM produto pro " + 
+					"  INNER JOIN produtoComprado pco ON pco.IdProduto = pro.IdProduto" + 
+					"    WHERE pro.IdProduto = (" + 
+					"		SELECT" + 
+					"			IdProduto" + 
+					"		FROM (" + 
+					"			SELECT" + 
+					"				SUM(pco.Quantidade) AS UnidadesVendidas," + 
+					"				pco.IdProduto" + 
+					"			FROM produtoComprado pco" + 
+					"			GROUP BY pco.IdProduto" + 
+					"			ORDER BY UnidadesVendidas DESC" + 
+					"			LIMIT 1 ) tab )" + 
+					"				GROUP BY pro.IdProduto";
+				preparedStatement = conn.prepareStatement(selectTableSQL);
+				ResultSet rs = preparedStatement.executeQuery();
+				if(rs != null && rs.next()) {
+					Produto novo = new Produto();
+					novo.setIdProduto(rs.getInt("IdProduto"));
+					novo.setNome(rs.getString("Nome"));
+					novo.setDescricao(rs.getString("Descricao"));
+					novo.setCategoria(rs.getString("Categoria"));
+					novo.setQuantidade(rs.getInt("Quantidade"));
+					novo.setPreco(rs.getDouble("Preco"));		      
+					rs.close();
+			        return novo;
+		        }
+				rs.close();
+				return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 }
